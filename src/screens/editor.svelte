@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { t } from '../i18n/index.svelte';
   import { people } from '../people/state.svelte';
   import type { Person } from '../people/people';
 
@@ -31,26 +32,26 @@
   };
 </script>
 
-<h2>{isNew ? 'New person' : 'Edit person'}</h2>
+<h2>{isNew ? t('newPerson') : t('editPerson')}</h2>
 
 <section class="card">
-  <label class="field"><span class="muted">Name</span><input class="input" bind:value={draft.displayName} placeholder="Sam Lee" /></label>
+  <label class="field"><span class="muted">{t('name')}</span><input class="input" bind:value={draft.displayName} placeholder={t('namePlaceholderPerson')} /></label>
   <label class="field">
-    <span class="muted">Tag (used as @tag in notes)</span>
-    <input class="input" bind:value={draft.username} placeholder="Filled from the name" disabled={!isNew && !!person} />
+    <span class="muted">{t('tagLabel')}</span>
+    <input class="input" bind:value={draft.username} placeholder={t('tagPlaceholder')} disabled={!isNew && !!person} />
   </label>
-  <label class="field"><span class="muted">Birthday (YYYY-MM-DD)</span><input class="input" bind:value={draft.birthday} placeholder="1990-10-24" /></label>
-  <label class="field"><span class="muted">Phone</span><input class="input" bind:value={draft.phone} inputmode="tel" /></label>
-  <label class="field"><span class="muted">Email</span><input class="input" bind:value={draft.email} inputmode="email" /></label>
+  <label class="field"><span class="muted">{t('birthdayLabel')}</span><input class="input" bind:value={draft.birthday} placeholder="1990-10-24" /></label>
+  <label class="field"><span class="muted">{t('phone')}</span><input class="input" bind:value={draft.phone} inputmode="tel" /></label>
+  <label class="field"><span class="muted">{t('email')}</span><input class="input" bind:value={draft.email} inputmode="email" /></label>
   <label class="field">
-    <span class="muted">Aim for contact every (days, 0 for none)</span>
+    <span class="muted">{t('contactEvery')}</span>
     <input class="input" type="number" min="0" max="365" bind:value={draft.maxNoContactDays} />
   </label>
 </section>
 
 {#if problem}<p class="problem">{problem}</p>{/if}
-<button class="primary" onclick={save}>Save</button>
-<button class="ghost" onclick={done}>Cancel</button>
+<button class="primary" onclick={save}>{t('save')}</button>
+<button class="ghost" onclick={done}>{t('cancel')}</button>
 
 <style>
   h2 { margin: 12px 0 8px; font-size: calc(13px * var(--scale)); font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }

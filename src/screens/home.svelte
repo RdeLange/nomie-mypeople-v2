@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { t } from '../i18n/index.svelte';
   import { people } from '../people/state.svelte';
   import { birthdayIn, daysSince, needsAttention, noContactScore, sortPeople, upcomingBirthdays, type Person, type SortMode } from '../people/people';
 
@@ -6,12 +7,12 @@
 
   let query = $state('');
   const now = new Date();
-  const SORTS: Array<[SortMode, string]> = [
-    ['attention', 'Attention'],
-    ['latest', 'Latest'],
-    ['oldest', 'Oldest'],
-    ['a-z', 'A–Z'],
-    ['z-a', 'Z–A'],
+  const sorts = (): Array<[SortMode, string]> => [
+    ['attention', t('sortAttention')],
+    ['latest', t('sortLatest')],
+    ['oldest', t('sortOldest')],
+    ['a-z', t('sortAZ')],
+    ['z-a', t('sortZA')],
   ];
   const matches = (p: Person) => !query.trim() || p.displayName.toLowerCase().includes(query.trim().toLowerCase());
   const everyone = $derived(sortPeople(people.list, people.sort, now).filter(matches));
@@ -20,33 +21,33 @@
 
   const sinceText = (p: Person): string => {
     const days = daysSince(p, now);
-    if (days === undefined) return 'No contact yet';
-    if (days === 0) return 'Today';
+    if (days === undefined) return t('noContactYet');
+    if (days === 0) return t('today');
     if (days === 1) return 'Yesterday';
-    return `${days} days ago`;
+    return t('daysAgo', { n: days });
   };
   const dueText = (p: Person): string => {
     const score = noContactScore(p, now);
     if (score >= 1000) return '';
-    if (score < 0) return `${-score} days overdue`;
-    return score === 0 ? 'Due today' : `Due in ${score} days`;
+    if (score < 0) return t('overdue', { n: -score });
+    return score === 0 ? t('dueToday') : t('dueIn', { n: score });
   };
   const birthdayText = (p: Person): string => {
     const left = birthdayIn(p, now);
-    return left === 0 ? 'Birthday today' : `Birthday in ${left} days`;
+    return left === 0 ? t('birthdayToday') : t('birthdayIn', { n: left ?? 0 });
   };
 </script>
 
 <input class="search" type="search" placeholder="Search people" bind:value={query} aria-label="Search people" />
 
 <div class="chips" role="group" aria-label="Sort">
-  {#each SORTS as [mode, label] (mode)}
+  {#each sorts() as [mode, label] (mode)}
     <button class:on={people.sort === mode} aria-pressed={people.sort === mode} onclick={() => people.setSort(mode)}>{label}</button>
   {/each}
 </div>
 
 {#if due.length}
-  <h2>Reach out</h2>
+  <h2>{t('reachOut')}</h2>
   <section class="card">
     {#each due as p (p.username)}
       <button class="row" onclick={() => open(p.username)}>
@@ -58,7 +59,7 @@
 {/if}
 
 {#if birthdays.length}
-  <h2>Birthdays</h2>
+  <h2>{t('birthdays')}</h2>
   <section class="card">
     {#each birthdays as p (p.username)}
       <button class="row" onclick={() => open(p.username)}>
@@ -68,7 +69,7 @@
   </section>
 {/if}
 
-<h2>Everyone</h2>
+<h2>{t('everyone')}</h2>
 <section class="card">
   {#each everyone as p (p.username)}
     <button class="row" onclick={() => open(p.username)}>
@@ -79,13 +80,13 @@
       </span>
     </button>
   {:else}
-    <p class="muted pad">{query ? 'No one matches.' : 'Mention someone with @name in a note, or add them here.'}</p>
+    <p class="muted pad">{query ? t('noMatch') : t('mentionHint')}</p>
   {/each}
 </section>
 
 <div class="row-buttons">
-  <button class="ghost" onclick={add}>Add a person</button>
-  <button class="ghost" onclick={fromNomie}>From Nomie</button>
+  <button class="ghost" onclick={add}>{t('addPerson')}</button>
+  <button class="ghost" onclick={fromNomie}>{t('fromNomie')}</button>
 </div>
 
 <style>

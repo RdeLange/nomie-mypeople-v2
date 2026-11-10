@@ -1,3 +1,4 @@
+import { t } from '../i18n/index.svelte';
 // The state of the plugin: the people, the recent notes that mention them, and the sort. The screens show it.
 import { mergeMentions, sortPeople, tagOf, type Person, type SortMode } from './people';
 
@@ -57,9 +58,9 @@ class PeopleState {
   // Adds or changes a person. A new one gets its tag from the name.
   save(person: Person): string | null {
     const name = person.displayName.trim();
-    if (!name) return 'Give the person a name.';
+    if (!name) return t('givePersonName');
     const username = person.username || tagOf(name);
-    if (!username) return 'The name needs a letter or a digit.';
+    if (!username) return t('needsLetter');
     if (person.birthday && !/^\d{4}-\d{2}-\d{2}$/.test(person.birthday)) return 'The birthday is YYYY-MM-DD.';
     const next = { ...$state.snapshot(person), username, displayName: name };
     this.saveAll({ ...this.people, [username]: next });
@@ -68,7 +69,7 @@ class PeopleState {
 
   // Takes a person out of the list. Their notes are not changed.
   async remove(username: string): Promise<boolean> {
-    const res = await this.plugin.confirm(`Remove ${this.people[username]?.displayName ?? username}?`, 'They are removed from My People. Nothing is removed from Nomie.');
+    const res = await this.plugin.confirm(t('removeQ', { name: this.people[username]?.displayName ?? username }), t('removeBody'));
     if (!res?.value) return false;
     const rest = { ...this.people };
     delete rest[username];

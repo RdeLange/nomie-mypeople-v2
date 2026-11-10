@@ -3,6 +3,7 @@
   import { people } from './people/state.svelte';
   import type { Person } from './people/people';
   import { paletteFrom, glassFrom, tintTextFrom, dangerTextFrom, type Palette, type Glass } from './palette';
+  import { t, setLanguage } from './i18n/index.svelte';
   import { onPrefsChange } from './prefs-live';
   import Home from './screens/home.svelte';
   import Person_ from './screens/person.svelte';
@@ -20,6 +21,7 @@
   const applyNomieValues = (plugin: any) => {
     if (!plugin?.prefs) return;
     palette = paletteFrom(plugin.prefs);
+    setLanguage(plugin.prefs?.language);
     glass = glassFrom(plugin.prefs);
     tintText = tintTextFrom(plugin.prefs);
     dangerText = dangerTextFrom(plugin.prefs);
@@ -75,11 +77,11 @@
       <span aria-hidden="true">👨‍👩‍👧‍👦</span>
       <h1>My People</h1>
     </div>
-    {#if people.busy}<span class="muted">Looking…</span>{/if}
+    {#if people.busy}<span class="muted">{t('looking')}</span>{/if}
   </header>
 
   {#if !people.loaded}
-    <p class="muted">Loading…</p>
+    <p class="muted">{t('loading')}</p>
   {:else if view.name === 'person'}
     <Person_ username={view.username} edit={editPerson} back={home} removed={home} />
   {:else if view.name === 'add'}

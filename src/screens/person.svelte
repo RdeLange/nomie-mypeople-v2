@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { t } from '../i18n/index.svelte';
   import { people } from '../people/state.svelte';
   import { CHECK_INS, birthdayIn, checkInNote, daysSince, noContactScore, telLink } from '../people/people';
   import { shortDate } from '../format';
@@ -20,48 +21,48 @@
 </script>
 
 {#if !p}
-  <p class="muted">This person is not in the list any more.</p>
-  <button class="ghost" onclick={back}>Back</button>
+  <p class="muted">{t('notInList')}</p>
+  <button class="ghost" onclick={back}>{t('back')}</button>
 {:else}
   <button class="link" onclick={back}>‹ Everyone</button>
   <h2>{p.displayName}</h2>
   <p class="muted">@{p.username}</p>
 
   <section class="card">
-    <div class="row"><span>Last contact</span><span class="muted">{sinceDays === undefined ? 'None yet' : sinceDays === 0 ? 'Today' : `${sinceDays} days ago`}</span></div>
+    <div class="row"><span>{t('lastContact')}</span><span class="muted">{sinceDays === undefined ? t('noneYet') : sinceDays === 0 ? t('today') : t('daysAgo', { n: sinceDays })}</span></div>
     {#if p.maxNoContactDays}
-      <div class="row"><span>Aim for contact every</span><span class="muted">{p.maxNoContactDays} days</span></div>
-      <div class="row"><span>Status</span><span class="muted">{score < 0 ? `${-score} days overdue` : score === 0 ? 'Due today' : `Due in ${score} days`}</span></div>
+      <div class="row"><span>{t('aimEvery')}</span><span class="muted">{t('aimEveryDays', { n: p.maxNoContactDays })}</span></div>
+      <div class="row"><span>{t('status')}</span><span class="muted">{score < 0 ? t('overdue', { n: -score }) : score === 0 ? t('dueToday') : t('dueIn', { n: score })}</span></div>
     {/if}
-    {#if left !== undefined}<div class="row"><span>Birthday</span><span class="muted">{left === 0 ? 'Today' : `In ${left} days`}</span></div>{/if}
+    {#if left !== undefined}<div class="row"><span>{t('birthday')}</span><span class="muted">{left === 0 ? t('today') : t('inDays', { n: left })}</span></div>{/if}
     {#if p.phone || p.email}
       <div class="actions">
-        {#if p.phone}<button class="chip" onclick={call}>Call</button>{/if}
-        {#if p.email}<button class="chip" onclick={mail}>Email</button>{/if}
+        {#if p.phone}<button class="chip" onclick={call}>{t('call')}</button>{/if}
+        {#if p.email}<button class="chip" onclick={mail}>{t('emailBtn')}</button>{/if}
       </div>
     {/if}
   </section>
 
-  <h2>Check in</h2>
+  <h2>{t('checkIn')}</h2>
   <div class="chips">
-    {#each CHECK_INS as kind (kind)}
-      <button onclick={() => people.checkIn(checkInNote(kind, p.username), p.username)}>{kind.replace(' with', '')}</button>
+    {#each CHECK_INS as kind (kind.note)}
+      <button onclick={() => people.checkIn(checkInNote(kind.note, p.username), p.username)}>{t(kind.label)}</button>
     {/each}
   </div>
 
-  <h2>Recent notes</h2>
+  <h2>{t('recentNotes')}</h2>
   <section class="card">
     {#each recent as note (note.id ?? note.end)}
       <div class="row note"><span>{shortDate(note.end)}</span><span class="muted note-text">{note.note ?? ''}</span></div>
     {:else}
-      <p class="muted pad">No notes with @{p.username} in the last 30 days.</p>
+      <p class="muted pad">{t('noNotesRecent', { username: p.username })}</p>
     {/each}
   </section>
 
   <div class="row-buttons">
-    <button class="ghost" onclick={edit}>Edit</button>
-    <button class="ghost" onclick={() => people.toggleHidden(p.username)}>{p.hidden ? 'Show in list' : 'Hide from list'}</button>
-    <button class="ghost danger" onclick={remove}>Remove</button>
+    <button class="ghost" onclick={edit}>{t('edit')}</button>
+    <button class="ghost" onclick={() => people.toggleHidden(p.username)}>{p.hidden ? t('showInList') : t('hideFromList')}</button>
+    <button class="ghost danger" onclick={remove}>{t('remove')}</button>
   </div>
 {/if}
 

@@ -67,7 +67,7 @@ describe('the list', () => {
   });
 
   it('a check-in starts with the kind and the tag of the person', () => {
-    expect(checkInNote('Lunch with', 'sam')).toBe('Lunch with @sam ');
+    expect(checkInNote('ciLunch', 'sam')).toBe('Lunch with @sam ');
     expect(telLink('+31 (0)6 12-34')).toBe('tel:+31061234');
   });
 });

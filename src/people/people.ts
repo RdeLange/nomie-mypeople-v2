@@ -1,3 +1,4 @@
+import { t, type Key } from '../i18n/index.svelte';
 // The people: who is in the list, when you last saw them, the contact you aim for, and their birthdays.
 // People come from the @mentions in your notes, and from the list the user keeps.
 const DAY = 24 * 60 * 60 * 1000;
@@ -112,9 +113,15 @@ export const upcomingBirthdays = (list: Person[], now: Date, days = 30): Person[
     .sort((a, b) => birthdayIn(a, now)! - birthdayIn(b, now)!);
 
 // The notes a check-in starts with. The tag of the person follows the text.
-export const CHECK_INS = ['Lunch with', 'Dinner with', 'Phone call with', 'Virtual meeting with', 'Texted', 'Emailed', 'Drinks with', 'Meeting with', 'Hung out with', 'With'];
+// The check-ins: the key of the note text (written to the timeline) and the key of the button label
+export const CHECK_INS: Array<{ note: Key; label: Key }> = [
+  { note: 'ciLunch', label: 'ciLunchLabel' }, { note: 'ciDinner', label: 'ciDinnerLabel' }, { note: 'ciPhone', label: 'ciPhoneLabel' },
+  { note: 'ciVirtual', label: 'ciVirtualLabel' }, { note: 'ciTexted', label: 'ciTextedLabel' }, { note: 'ciEmailed', label: 'ciEmailedLabel' },
+  { note: 'ciDrinks', label: 'ciDrinksLabel' }, { note: 'ciMeeting', label: 'ciMeetingLabel' }, { note: 'ciHungOut', label: 'ciHungOutLabel' },
+  { note: 'ciWith', label: 'ciWithLabel' },
+];
 
-export const checkInNote = (kind: string, username: string): string => `${kind} @${username} `;
+export const checkInNote = (kind: Key, username: string): string => `${t(kind)} @${username} `;
 
 // A phone number as a link: only digits and the plus sign are kept
 export const telLink = (phone: string): string => `tel:${phone.replace(/[^0-9+]/g, '')}`;
