@@ -76,7 +76,7 @@
   .note { align-items: flex-start; }
   .note-text { text-align: right; overflow-wrap: anywhere; }
   .actions { display: flex; gap: 8px; padding: 8px 0 10px; }
-  .chip { padding: 8px 14px; border: 0; border-radius: 10px; background: var(--fill); color: var(--tint); font: inherit; cursor: pointer; }
+  .chip { padding: 8px 14px; border: 0; border-radius: 10px; background: var(--fill); color: var(--tint-text); font: inherit; cursor: pointer; }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .chips button { padding: 8px 12px; border: 0; border-radius: 10px; background: var(--fill); color: var(--text); font: inherit; font-size: calc(14px * var(--scale)); cursor: pointer; }
   h2:not(:first-of-type) { margin-top: 16px; font-size: calc(13px * var(--scale)); font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
